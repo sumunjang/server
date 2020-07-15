@@ -1,0 +1,32 @@
+{
+  "name": "sumunjang",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon bin/www --exec babel-node --presets @babel/preset-env"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.10.4",
+    "bcrypt": "^5.0.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "jest": "^26.1.0",
+    "morgan": "~1.9.1",
+    "sequelize": "^6.3.3",
+    "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^26.1.0",
+    "regenerator-runtime": "^0.13.5"
+  },
+  "test": "NODE_ENV=test ./node_modules/.bin/jest tests --coverage"
+}

@@ -1,4 +1,9 @@
-# 레포지터리 초기 세팅 템플릿
+# 수문장 서버
+
+## 사용기술
+- Node.js(express)
+- Sequelize
+- sqlite
 
 ## How To Contribute
 ### commit
