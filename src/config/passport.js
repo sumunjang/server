@@ -40,7 +40,7 @@ module.exports = () => {
     //JWT Strategy
     passport.use(new JWTStrategy({
             jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-            secretOrKey   : sumunjangApi
+            secretOrKey   : "sumunjangApi"
         },
         function (jwtPayload, done) {
             return userRepo.findByNickname(jwtPayload.nickname)
