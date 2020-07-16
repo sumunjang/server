@@ -29,7 +29,7 @@ describe('로그인 테스트', () => {
                 nickname: userData.nickname,
                 password: userData.password
             });
-
+        console.log(response.body)
         expect(response.statusCode)
             .toBe(200);
         expect(response.body.token)
