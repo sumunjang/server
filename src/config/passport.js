@@ -24,7 +24,6 @@ module.exports = () => {
                     else{
                         bcrypt.compare(password, user.password)
                             .then(pwCheck =>{
-                                console.log(pwCheck)
                                 if(!pwCheck)
                                     return done(null, false, {message: 'Incorrect ID or password.'});
                                 else
@@ -40,7 +39,7 @@ module.exports = () => {
     //JWT Strategy
     passport.use(new JWTStrategy({
             jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-            secretOrKey   : "sumunjangApi"
+            secretOrKey   : process.env.JWT_SECRET
         },
         function (jwtPayload, done) {
             return userRepo.findByNickname(jwtPayload.nickname)
