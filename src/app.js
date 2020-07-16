@@ -8,6 +8,8 @@ var logger = require('morgan');
 
 var routes = require('./routes');
 var sequelize = require('./models').sequelize;
+const passport = require('passport');
+const passportConfig = require('./config/passport')
 
 var app = express();
 sequelize.sync();
@@ -16,6 +18,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(passport.initialize());
+passportConfig();
 
 app.use('/', routes);
 

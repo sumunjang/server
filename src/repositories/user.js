@@ -14,8 +14,12 @@ export default {
         })
     },
 
-    findById: async (id) => await models.User.findByPk(id)
-
+    findById: async (id) => await models.User.findByPk(id),
+    findByNickname: async (nickname) => await models.User.findOne({
+        where: {
+            nickname,
+        }
+    })
     // UPDATE
     // DELETE
 }

@@ -7,6 +7,6 @@ router.get('/', (req, res, next) => {
     res.json(usersService.getProfile());
 });
 
-router.post('/', usersService.signUp);
+
 
 module.exports = router;
