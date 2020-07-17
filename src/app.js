@@ -13,6 +13,12 @@ const passportConfig = require('./config/passport')
 
 var app = express();
 sequelize.sync();
+const cors = require('cors');
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 app.use(logger('dev'));
 app.use(express.json());
