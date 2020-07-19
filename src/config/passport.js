@@ -11,12 +11,12 @@ require('dotenv').config();
 module.exports = () => {
     // Local Strategy
     passport.use(new LocalStrategy({
-            usernameField: 'nickname',
+            usernameField: 'userid',
             passwordField: 'password'
         },
-        function (nickname, password, done) {
+        function (userid, password, done) {
             // 이 부분에선 저장되어 있는 User를 비교하면 된다.
-            return userRepo.findByNickname(nickname)
+            return userRepo.findByUserId(userid)
                 .then(user => {
                     if (!user) {
                         return done(null, false, {message: 'Incorrect ID or password.'});

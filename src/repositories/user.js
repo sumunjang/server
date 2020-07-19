@@ -7,9 +7,9 @@ export default {
     all: async () => await models.User.findAll(),
 
     findById: async (id) => await models.User.findByPk(id),
-    findByNickname: async (nickname) => await models.User.findOne({
+    findByUserId: async (user_id) => await models.User.findOne({
         where: {
-            nickname,
+            user_id,
         }
     })
     // UPDATE
