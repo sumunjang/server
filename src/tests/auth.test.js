@@ -13,7 +13,7 @@ describe('로그인 테스트', () => {
 
     beforeAll(async () => {
         userData = {
-            nickname: randomString(),
+            user_id: randomString(),
             password: randomString(),
             name: randomString()
         };
@@ -26,10 +26,9 @@ describe('로그인 테스트', () => {
         let response = await request(app)
             .post('/auth/signin')
             .send({
-                nickname: userData.nickname,
+                userid: userData.user_id,
                 password: userData.password
             });
-        console.log(response.body)
         expect(response.statusCode)
             .toBe(200);
         expect(response.body.token)
@@ -40,7 +39,7 @@ describe('로그인 테스트', () => {
         let response = await request(app)
             .post('/auth/signin')
             .send({
-                nickname: 'notFound',
+                userid: 'notFound',
                 password: 'wrongPassword'
             });
 
