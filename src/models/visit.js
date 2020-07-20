@@ -1,5 +1,4 @@
 'use strict'
-import bcrypt from 'bcrypt'
 
 module.exports = (sequelize, DataTypes) => {
 	const visit = sequelize.define('visit', {
