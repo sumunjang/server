@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 import bcrypt from 'bcrypt'
 
 module.exports = (sequelize, DataTypes) => {
@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
 	}, {
 		tableName: 'users',
 		timestamps: false,
-	})
+	});
 
 	User.associate = function (models) {
-		// associations
-	}
+		User.hasMany(models.visit)
+	};
 
 	// hooks
 	User.beforeSave(async (user, options) => {
@@ -38,4 +38,4 @@ module.exports = (sequelize, DataTypes) => {
 		}
 	});
 	return User
-}
+};
