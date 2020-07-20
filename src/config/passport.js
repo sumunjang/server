@@ -42,7 +42,7 @@ module.exports = () => {
             secretOrKey   : process.env.JWT_SECRET
         },
         function (jwtPayload, done) {
-            return userRepo.findByNickname(jwtPayload.nickname)
+            return userRepo.findByUserId(jwtPayload.user_id)
                 .then(user => {
                     return done(null, user);
                 })

@@ -1,4 +1,5 @@
 import models from '../models'
+
 export default {
     // CREATE
     store: async (data) => await models.User.create(data),
@@ -11,7 +12,18 @@ export default {
         where: {
             user_id,
         }
-    })
+    }),
     // UPDATE
+    updateByUserId: async (profile, user_id) => await models.User.update(
+        {
+            name: profile.name,
+        },
+        {
+            where: {
+                user_id: user_id
+            }
+        }
+    )
+
     // DELETE
 }
