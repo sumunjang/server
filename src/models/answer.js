@@ -12,13 +12,19 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING(30),
 			allowNull: false,
 		},
+		visitId:{
+			type: DataTypes.STRING(30),
+			allowNull: false,
+		},
 	}, {
 		tableName: 'answers',
-		timestamps: false,
+		timestamps: true,
 	})
 
 	Answer.associate = function (models) {
-
+		Answer.belongsTo(models.question, {
+			foreignKey: "questionId"
+		})
 	}
 
 	// hooks

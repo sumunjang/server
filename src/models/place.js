@@ -23,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
 
 	Place.associate = function (models) {
 		Place.hasMany(models.visit)
-		Place.hasMany(models.question)
 	}
 
 	// hooks

@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
 			primaryKey: true,
 			autoIncrement: true,
 		},
+		userId:{
+			type: DataTypes.STRING(20),
+			allowNull: false,
+		},
 	}, {
 		tableName: 'visits',
 		timestamps: true,
@@ -15,9 +19,6 @@ module.exports = (sequelize, DataTypes) => {
 
 	visit.associate = function (models) {
 		visit.hasMany(models.Answer)
-		visit.belongsTo(models.User, {
-			foreignKey: "UserId"
-		})
 		visit.belongsTo(models.Place, {
 			foreignKey: "PlaceId"
 		})
