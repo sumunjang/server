@@ -12,6 +12,7 @@ exports.getProfile = async (req, res, next) => {
                 res.json({username, userid})
             }
         )
+        .catch(err => res.status(400).json())
 };
 
 exports.updateProfile = async (req, res, next) => {
@@ -25,10 +26,12 @@ exports.updateProfile = async (req, res, next) => {
                     .then(res.json())
             }
         )
+        .catch(err => res.status(400).json())
 };
 
 exports.withdrawal = async (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const userId = jwt.verify(token, process.env.JWT_SECRET).user_id;
     userRepo.deleteByUserId(userId).then(res.json())
+        .catch(err => res.status(400).json())
 };

@@ -18,6 +18,7 @@ exports.getVisitList = async (req, res, next) => {
                     })
             }
         ).then(response => res.json(response))
+        .catch(err => res.status(400).json())
 };
 
 exports.getNowVisitList = async (req, res, next) => {
@@ -31,4 +32,5 @@ exports.getNowVisitList = async (req, res, next) => {
             var visittime = value[0].dataValues.createdAt;
             res.json({placeid, placename, address, visittime})
         })
+        .catch(err => res.status(400).json())
 }
