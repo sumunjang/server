@@ -15,15 +15,12 @@ export default {
     }),
     // UPDATE
     updateByUserId: async (profile, user_id) => await models.User.update(
-        {
-            name: profile.name,
-        },
-        {
-            where: {
-                user_id: user_id
-            }
-        }
-    )
+        { name: profile.name,},
+        { where: { user_id: user_id } }
+    ),
 
     // DELETE
+    deleteByUserId: async (userId) => await models.User.destroy(
+        { where: { user_id: userId }}
+    )
 }
