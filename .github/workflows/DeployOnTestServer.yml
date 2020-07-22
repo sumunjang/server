@@ -1,0 +1,44 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Deploy on Test Server
+
+on:
+  pull_request:
+    types: [closed] # when PR closed
+    branches: [ develop ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+      # Docker Package 배포
+    - name: Publish Image
+      uses: matootie/github-docker@v3.0.0
+      with:
+        accessToken: ${{ secrets.TOKEN }}
+        tag: |
+          latest
+          ${{github.sha}}
+        imageName: testserver
+      # Test 서버에 배포
+    - name: Deploy on Test Server
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: cat ~/packageToken | sudo docker login https://docker.pkg.github.com --username always0ne  --password-stdin && sudo docker stop sumunjangtestserver && sudo docker rm sumunjangtestserver && sudo docker run -d  -p 3000:3000 --name=sumunjangtestserver --restart=unless-stopped docker.pkg.github.com/sumunjang/server/testserver:${{github.sha}}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        privateKey: ${{ secrets.PRIVATE_KEY}}
