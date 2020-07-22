@@ -12,7 +12,7 @@ const passport = require('passport');
 const passportConfig = require('./config/passport')
 
 var app = express();
-sequelize.sync({force:true});
+sequelize.sync();
 const cors = require('cors');
 const corsOptions = {
   origin: '*',
