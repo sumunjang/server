@@ -12,6 +12,6 @@ router.use('/auth', auth);
 router.use('/profile', passport.authenticate('jwt', {session: false}), profile);
 router.use('/visits', passport.authenticate('jwt', {session: false}), visits);
 router.use('/places', passport.authenticate('jwt', {session: false}), place);
-router.use('/form', passport.authenticate('jwt', {session: false}), questionnaires);
+router.use('/forms', passport.authenticate('jwt', {session: false}), questionnaires);
 
 module.exports = router;
