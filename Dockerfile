@@ -4,6 +4,5 @@ RUN mkdir -p /app
 WORKDIR /app
 ADD . /app
 RUN npm ci --only=production
-RUN npm start
 EXPOSE 3000
 CMD [ "npm", "start" ]
