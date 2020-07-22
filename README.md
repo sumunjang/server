@@ -4,6 +4,7 @@
 - Node.js(express)
 - Sequelize
 - sqlite
+- websocket
 
 ## How To Contribute
 ### commit
