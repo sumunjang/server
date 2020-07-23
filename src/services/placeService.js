@@ -52,10 +52,18 @@ exports.getPlaceInfo = async (req, res, next) => {
 };
 
 exports.registerPlace = async (req, res, next) => {
-    userRepo.store({
-        user_id: req.body.userid,
-        password: req.body.password,
-        name: req.body.name
-    }).then(placeRepo.store({id: null, name: req.body.placeName, address: req.body.address}))
+    placeRepo.store({
+        id: null,
+        name: req.body.placeName,
+        address: req.body.address
+    })
+        .then( place =>
+            userRepo.store({
+                user_id: req.body.userid,
+                password: req.body.password,
+                name: req.body.name,
+                placeId: place.id
+            })
+        )
         .then(res.json(req.body.userid))
 };
