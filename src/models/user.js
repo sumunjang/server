@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING(20),
 			allowNull: false,
 		},
+		placeId:{
+			type: DataTypes.INTEGER,
+			allowNull: true,
+		},
 	}, {
 		tableName: 'users',
 		timestamps: false,

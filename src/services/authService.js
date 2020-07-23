@@ -10,7 +10,7 @@ exports.signIn = function (req, res) {
                 message: 'Something is wrong.'
             });
         }
-        if(!user)
+        if (!user)
             return res.status(400).json({
                 message: 'Incorrect ID or password.'
             });
@@ -20,7 +20,14 @@ exports.signIn = function (req, res) {
             }
             const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET);
             const username = user.name;
-            return res.json({username, token});
+            if (user.placeId != null){
+                const placeId = user.placeId
+                return res.json({username, placeId, token});
+            }
+            else
+                return res.json({username, token});
+
+
         });
     })(req, res);
 };
