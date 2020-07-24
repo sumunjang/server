@@ -1,5 +1,6 @@
 import userRepo from "../repositories/user"
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 exports.getProfile = async (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
@@ -18,10 +19,13 @@ exports.getProfile = async (req, res, next) => {
 exports.updateProfile = async (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const userId = jwt.verify(token, process.env.JWT_SECRET).user_id;
+
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(req.body.password, salt);
     userRepo.findByUserId(userId)
         .then(
             profile => {
-                profile.name = req.body.username;
+                profile.password = password;
                 userRepo.updateByUserId(profile,userId)
                     .then(res.json())
             }

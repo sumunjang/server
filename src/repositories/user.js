@@ -15,7 +15,7 @@ export default {
     }),
     // UPDATE
     updateByUserId: async (profile, user_id) => await models.User.update(
-        { name: profile.name,},
+        { password: profile.password,},
         { where: { user_id: user_id } }
     ),
 

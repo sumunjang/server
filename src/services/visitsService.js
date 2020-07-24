@@ -14,7 +14,8 @@ exports.getVisitList = async (req, res, next) => {
                         var placename = value.dataValues.Place.name;
                         var address = value.dataValues.Place.address;
                         var visittime = value.dataValues.createdAt;
-                        return {placeid, placename, address, visittime}
+                        var visitid = value.dataValues.id;
+                        return {placeid, placename, address, visittime, visitid}
                     })
             }
         ).then(response => res.json(response))
