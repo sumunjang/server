@@ -13,6 +13,7 @@ router.use('/auth', auth);
 router.use('/profile', passport.authenticate('jwt', {session: false}), profile);
 router.use('/visits', passport.authenticate('jwt', {session: false}), visits);
 router.use('/places/register', placeService.registerPlace);
+router.get('/places/', placeService.getPlaces);
 router.use('/places', passport.authenticate('jwt', {session: false}), place);
 router.use('/forms', passport.authenticate('jwt', {session: false}), questionnaires);
 
