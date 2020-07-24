@@ -33,10 +33,20 @@ exports.signIn = function (req, res) {
 };
 
 exports.signUp = async (req, res, next) => {
-    userRepo.store({
+    await userRepo.store({
         user_id: req.body.userid,
         password: req.body.password,
         name: req.body.name
-    }).catch(res.status(500).json("ID가 중복되었습니다."))
+    })
         .then(res.json())
 };
+
+exports.idcheck = async (req,res,next) => {
+    userRepo.findByUserId(req.params.id)
+        .then(result =>{
+            if(result===null)
+                res.json("OK")
+            else
+                res.status(400).json("NO")
+        })
+}
