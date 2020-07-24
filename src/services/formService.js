@@ -2,7 +2,7 @@ import questionRepo from "../repositories/question";
 import answerRepo from "../repositories/answer";
 import visitRepo from "../repositories/visit"
 import jwt from "jsonwebtoken";
-import place from "../repositories/place";
+import placeRepo from "../repositories/place";
 
 exports.getMySubmits = async (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
@@ -12,7 +12,10 @@ exports.getMySubmits = async (req, res, next) => {
             return result.map(function (value, index) {
                 var submitid = value.id;
                 var placeid = value.Place.id;
-                return {placeid,submitid}
+                var placeName = value.Place.name;
+                var address = value.Place.address;
+
+                return {placeid,submitid,placeName,address}
             })
         }).then( list => res.json(list) )
 };
