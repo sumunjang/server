@@ -14,13 +14,15 @@ exports.getMySubmits = async (req, res, next) => {
                 var placeid = value.Place.id;
                 var placeName = value.Place.name;
                 var address = value.Place.address;
-
-                return {placeid,submitid,placeName,address}
+                var submitdate = value.createdAt;
+                return {placeid,submitid,placeName,address,submitdate}
             })
         }).then( list => res.json(list) )
 };
 
 exports.getFormInPlace = async (req, res, next) => {
+    const token = req.headers.authorization.split('Bearer ')[1];
+    const userId = jwt.verify(token, process.env.JWT_SECRET).user_id;
     questionRepo.findAllByPlaceId(req.params.placeid)
         .then(result => {
                 return result.map(function (value, index) {
