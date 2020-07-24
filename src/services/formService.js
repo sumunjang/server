@@ -5,7 +5,16 @@ import jwt from "jsonwebtoken";
 import place from "../repositories/place";
 
 exports.getMySubmits = async (req, res, next) => {
-    // req.params.keyword;
+    const token = req.headers.authorization.split('Bearer ')[1];
+    const userId = jwt.verify(token, process.env.JWT_SECRET).user_id;
+    visitRepo.findAllDescByuserId(userId)
+        .then( result =>{
+            return result.map(function (value, index) {
+                var submitid = value.id;
+                var placeid = value.Place.id;
+                return {placeid,submitid}
+            })
+        }).then( list => res.json(list) )
 };
 
 exports.getFormInPlace = async (req, res, next) => {
@@ -102,26 +111,26 @@ exports.updateForm = async (req, res, next) => {
     // req.params.placeid;
     questionRepo.findAllByPlaceId(req.params.placeid)
         .then(async result => {
-            for(var i =0;i<req.body.data.length;i++){
-                var isDeleted = true;
-                console.log(req.body.data[i])
-                if(req.body.data[i].questionid>0){
-                    for(var j =0;result[j]!=undefined;j++){
-                        if(req.body.data[i].questionid === result[j].id){
-                            isDeleted=false;
-                            await questionRepo.updateByQuestionId(req.body.data[i].question,result[j].id)
-                          }
+                for(var i =0;i<req.body.data.length;i++){
+                    var isDeleted = true;
+                    console.log(req.body.data[i])
+                    if(req.body.data[i].questionid>0){
+                        for(var j =0;result[j]!=undefined;j++){
+                            if(req.body.data[i].questionid === result[j].id){
+                                isDeleted=false;
+                                await questionRepo.updateByQuestionId(req.body.data[i].question,result[j].id)
+                            }
+                        }
+                    }else{
+                        isDeleted=false;
+                        var question = req.body.data[i].question;
+                        var placeId = req.params.placeid
+                        await questionRepo.store({id:null,question:question,PlaceId:placeId})
                     }
-                }else{
-                    isDeleted=false;
-                    var question = req.body.data[i].question;
-                    var placeId = req.params.placeid
-                    await questionRepo.store({id:null,question:question,PlaceId:placeId})
+                    if(isDeleted){
+                        await questionRepo.deleteByQuestionId(req.body.data[i].questionid)
+                    }
                 }
-                if(isDeleted){
-                    await questionRepo.deleteByQuestionId(req.body.data[i].questionid)
-                }
-            }
             }
         ).then(res.json(""))
 };
