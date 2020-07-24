@@ -6,10 +6,10 @@
     "test": "jest tests --coverage --detectOpenHandles --forceExit"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.10.4",
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
     "@babel/node": "^7.10.5",
+    "@babel/polyfill": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-node": "0.0.1-security",
@@ -30,6 +30,7 @@
     "passport-local": "^1.0.0",
     "random-string": "^0.2.0",
     "sequelize": "^6.3.3",
+    "socket.io": "^2.3.0",
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {

@@ -10,15 +10,15 @@ exports.getMySubmits = async (req, res, next) => {
 exports.getFormInPlace = async (req, res, next) => {
     questionRepo.findAllByPlaceId(req.params.placeid)
         .then(result => {
-                return result.map(function (value, index) {
-                    var questionid = value.id;
-                    var question = value.question;
-                    return {questionid, question}
-                })
-            }
+            return result.map(function (value, index) {
+                var questionid = value.id;
+                var question = value.question;
+                return { questionid, question }
+            })
+        }
         ).then(requestForm => {
-        res.json({requestForm})
-    })
+            res.json({ requestForm })
+        })
 };
 
 exports.getMySubmit = async (req, res, next) => {
@@ -28,30 +28,44 @@ exports.getMySubmit = async (req, res, next) => {
     answerRepo.findByVisitId(req.params.submitid)
         .then(
             answer => {
-                return answer.map(function(value,index){
+                return answer.map(function (value, index) {
                     console.log(value);
                     var questionid = value.questionId;
                     var answer = value.answer;
                     var question = value.dataValues.question.question;
-                    submittime =value.createdAt;
-                    return {questionid, question, answer}
+                    submittime = value.createdAt;
+                    return { questionid, question, answer }
                 })
             })
-        .then( (requestForm, answer) =>{
-            res.json({submittime, requestForm})
+        .then((requestForm, answer) => {
+            res.json({ submittime, requestForm })
         })
 };
 
 exports.submitForm = async (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const userId = jwt.verify(token, process.env.JWT_SECRET).user_id;
-    visitRepo.store({id:null, PlaceId:req.params.placeid, userId:userId})
+    visitRepo.store({ id: null, PlaceId: req.params.placeid, userId: userId })
         .then(
             visit => {
                 req.body.requestForm.map(function (value, index) {
-                        answerRepo.store({id: null, answer: value.answer, questionId: value.questionid, visitId: visit.id})
-                    })
-            })
+                    answerRepo.store({ id: null, answer: value.answer, questionId: value.questionid, visitId: visit.id })
+                })
+                // websocket part
+                try {
+                    const socketId = req.app.get('clients').get(visit.dataValues.PlaceId);
+                    const newPerson = {
+                        name: visit.dataValues.userId,
+                        date: visit.dataValues.createdAt,
+                        access: true
+                    };
+                    req.app.get('io').to(socketId).emit('listenServer', newPerson);
+                }
+                catch (error) {
+                    console.error(error);
+                }
+            }
+        )
         .then(res.json())
 };
 
