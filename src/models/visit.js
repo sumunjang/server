@@ -12,6 +12,26 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING(20),
 			allowNull: false,
 		},
+		oversea:{
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+		},
+		cough:{
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+		},
+		sore:{
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+		},
+		dyspnoea:{
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+		},
+		touch:{
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+		},
 	}, {
 		tableName: 'visits',
 		timestamps: true,

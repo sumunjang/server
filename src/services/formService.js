@@ -45,11 +45,25 @@ exports.getMySubmit = async (req, res, next) => {
 exports.submitForm = async (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const userId = jwt.verify(token, process.env.JWT_SECRET).user_id;
-    visitRepo.store({ id: null, PlaceId: req.params.placeid, userId: userId })
+    visitRepo.store({
+        id: null,
+        PlaceId: req.params.placeid,
+        userId: userId,
+        oversea: req.body.fixedForm.oversea,
+        cough:req.body.fixedForm.cough,
+        sore:req.body.fixedForm.sore,
+        dyspnoea:req.body.fixedForm.dyspnoea,
+        touch:req.body.fixedForm.touch
+    })
         .then(
             visit => {
                 req.body.requestForm.map(function (value, index) {
-                    answerRepo.store({ id: null, answer: value.answer, questionId: value.questionid, visitId: visit.id })
+                    answerRepo.store({
+                        id: null,
+                        answer: value.answer,
+                        questionId: value.questionid,
+                        visitId: visit.id,
+                    })
                 })
                 // websocket part
                 try {

@@ -37,5 +37,6 @@ exports.signUp = async (req, res, next) => {
         user_id: req.body.userid,
         password: req.body.password,
         name: req.body.name
-    }).then(res.json())
+    }).catch(res.status(500).json("ID가 중복되었습니다."))
+        .then(res.json())
 };
