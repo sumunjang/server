@@ -23,17 +23,37 @@ exports.getMySubmits = async (req, res, next) => {
 exports.getFormInPlace = async (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const userId = jwt.verify(token, process.env.JWT_SECRET).user_id;
-    questionRepo.findAllByPlaceId(req.params.placeid)
-        .then(result => {
-                return result.map(function (value, index) {
-                    var questionid = value.id;
-                    var question = value.question;
-                    return {questionid, question}
-                })
+
+    visitRepo.findLatestOneByuserIdAndPlaceId(userId,req.params.placeid)
+        .then(visit =>{
+            console.log(visit[0])
+            if(visit[0] === undefined){
+                questionRepo.findAllByPlaceId(req.params.placeid)
+                    .then(result => {
+                            return result.map(function (value, index) {
+                                var questionid = value.id;
+                                var question = value.question;
+                                return {questionid, question}
+                            })
+                        }
+                    ).then(requestForm => {res.json({requestForm})})
+            }else{
+                    answerRepo.findByVisitId(visit[0].id)
+                        .then(
+                            answer => {
+                                return answer.map(function (value, index) {
+                                    var questionid = value.questionId;
+                                    var answer = value.answer;
+                                    var question = value.dataValues.question.question;
+                                    return {questionid, question, answer}
+                                })
+                            })
+                        .then(requestForm =>res.json({requestForm}))
             }
-        ).then(requestForm => {
-        res.json({requestForm})
-    })
+        })
+
+
+
 };
 
 exports.getMySubmit = async (req, res, next) => {

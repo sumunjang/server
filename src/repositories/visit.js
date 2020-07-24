@@ -34,7 +34,16 @@ export default {
     include:[
         {model: models.Place, required:true}
     ]
-}),
+}),    findLatestOneByuserIdAndPlaceId: async (userId,placeId) => await models.visit.findAll({
+        limit: 1,
+        order:[['createdAt','DESC']],
+        where:{
+            userId:userId
+        },
+        include:[
+            {model: models.Place, required:true, where:{id:placeId}}
+        ]
+    }),
     findAllDescByuserId: async (userId) => await models.visit.findAll({
         order:[['createdAt','DESC']],
         where:{
