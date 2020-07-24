@@ -35,6 +35,15 @@ export default {
         {model: models.Place, required:true}
     ]
 }),
+    findAllDescByuserId: async (userId) => await models.visit.findAll({
+        order:[['createdAt','DESC']],
+        where:{
+            userId:userId
+        },
+        include:[
+            {model: models.Place, required:true}
+        ]
+    }),
     // UPDATE
     // DELETE
 }
