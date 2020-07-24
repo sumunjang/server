@@ -55,7 +55,7 @@ exports.submitForm = async (req, res, next) => {
                 try {
                     const socketId = req.app.get('clients').get(visit.dataValues.PlaceId);
                     const newPerson = {
-                        name: visit.dataValues.userId,
+                        name: req.body.username,
                         date: visit.dataValues.createdAt,
                         access: true
                     };
