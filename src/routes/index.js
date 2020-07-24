@@ -7,10 +7,12 @@ const auth = require('./auth');
 const place = require('./place');
 const questionnaires = require('./form');
 const passport = require('passport');
+const placeService = require('../services/placeService')
 
 router.use('/auth', auth);
 router.use('/profile', passport.authenticate('jwt', {session: false}), profile);
 router.use('/visits', passport.authenticate('jwt', {session: false}), visits);
+router.use('/places/register', placeService.registerPlace);
 router.use('/places', passport.authenticate('jwt', {session: false}), place);
 router.use('/forms', passport.authenticate('jwt', {session: false}), questionnaires);
 
