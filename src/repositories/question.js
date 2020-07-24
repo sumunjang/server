@@ -13,5 +13,12 @@ export default {
         }
     }),
     // UPDATE
+    updateByQuestionId: async (question, questionid) => await models.question.update(
+        { question: question,},
+        { where: { id: questionid } }
+    ),
     // DELETE
+    deleteByQuestionId: async (questionId) => await models.question.destroy(
+        { where: { id: questionId }}
+    )
 }
