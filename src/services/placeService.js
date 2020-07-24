@@ -67,3 +67,20 @@ exports.registerPlace = async (req, res, next) => {
         )
         .then(res.json(req.body.userid))
 };
+
+exports.getPlaces = async (req, res, next) => {
+    placeRepo.all()
+        .then(
+            result => {
+
+                return result.map(function (value, index){
+                    var placeid = value.id;
+                    var placename = value.name;
+                    var address = value.address;
+                    return{placeid, placename, address}
+                })
+            }
+        )
+        .then(response => res.json(response))
+        .catch(err => res.status(500).json())
+};
