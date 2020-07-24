@@ -10,36 +10,51 @@ exports.getMySubmits = async (req, res, next) => {
 exports.getFormInPlace = async (req, res, next) => {
     questionRepo.findAllByPlaceId(req.params.placeid)
         .then(result => {
-            return result.map(function (value, index) {
-                var questionid = value.id;
-                var question = value.question;
-                return { questionid, question }
-            })
-        }
+                return result.map(function (value, index) {
+                    var questionid = value.id;
+                    var question = value.question;
+                    return {questionid, question}
+                })
+            }
         ).then(requestForm => {
-            res.json({ requestForm })
-        })
+        res.json({requestForm})
+    })
 };
 
 exports.getMySubmit = async (req, res, next) => {
     // req.params.placeid;
     // req.params.submitid;
     var submittime;
-    answerRepo.findByVisitId(req.params.submitid)
+    var oversea;
+    var cough;
+    var sore;
+    var dyspnoea;
+    var touch;
+    visitRepo.findById(req.params.submitid)
         .then(
-            answer => {
-                return answer.map(function (value, index) {
-                    console.log(value);
-                    var questionid = value.questionId;
-                    var answer = value.answer;
-                    var question = value.dataValues.question.question;
-                    submittime = value.createdAt;
-                    return { questionid, question, answer }
+            visit => {
+                oversea = visit.oversea
+                cough = visit.cough
+                sore = visit.sore
+                dyspnoea = visit.dyspnoea
+                touch = visit.touch
+            }
+        ).then(
+        answerRepo.findByVisitId(req.params.submitid)
+            .then(
+                answer => {
+                    return answer.map(function (value, index) {
+                        var questionid = value.questionId;
+                        var answer = value.answer;
+                        var question = value.dataValues.question.question;
+                        submittime = value.createdAt;
+                        return {questionid, question, answer}
+                    })
                 })
-            })
-        .then((requestForm, answer) => {
-            res.json({ submittime, requestForm })
-        })
+            .then((requestForm, answer) => {
+                var fixedForm = {oversea, cough, sore, dyspnoea, touch}
+                res.json({submittime, requestForm, fixedForm})
+            }))
 };
 
 exports.submitForm = async (req, res, next) => {
@@ -50,10 +65,10 @@ exports.submitForm = async (req, res, next) => {
         PlaceId: req.params.placeid,
         userId: userId,
         oversea: req.body.fixedForm.oversea,
-        cough:req.body.fixedForm.cough,
-        sore:req.body.fixedForm.sore,
-        dyspnoea:req.body.fixedForm.dyspnoea,
-        touch:req.body.fixedForm.touch
+        cough: req.body.fixedForm.cough,
+        sore: req.body.fixedForm.sore,
+        dyspnoea: req.body.fixedForm.dyspnoea,
+        touch: req.body.fixedForm.touch
     })
         .then(
             visit => {
@@ -74,8 +89,7 @@ exports.submitForm = async (req, res, next) => {
                         access: true
                     };
                     req.app.get('io').to(socketId).emit('listenServer', newPerson);
-                }
-                catch (error) {
+                } catch (error) {
                     console.error(error);
                 }
             }
