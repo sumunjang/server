@@ -61,7 +61,7 @@ exports.registerPlace = async (req, res, next) => {
             userRepo.store({
                 user_id: req.body.userid,
                 password: req.body.password,
-                name: req.body.name,
+                name: req.body.placeName,
                 placeId: place.id
             })
         )
