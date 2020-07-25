@@ -8,26 +8,26 @@ exports.getMySubmits = async (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const userId = jwt.verify(token, process.env.JWT_SECRET).user_id;
     visitRepo.findAllDescByuserId(userId)
-        .then( result =>{
+        .then(result => {
             return result.map(function (value, index) {
                 var submitid = value.id;
                 var placeid = value.Place.id;
                 var placeName = value.Place.name;
                 var address = value.Place.address;
                 var submitdate = value.createdAt;
-                return {placeid,submitid,placeName,address,submitdate}
+                return {placeid, submitid, placeName, address, submitdate}
             })
-        }).then( list => res.json(list) )
+        }).then(list => res.json(list))
 };
 
 exports.getFormInPlace = async (req, res, next) => {
     const token = req.headers.authorization.split('Bearer ')[1];
     const userId = jwt.verify(token, process.env.JWT_SECRET).user_id;
 
-    visitRepo.findLatestOneByuserIdAndPlaceId(userId,req.params.placeid)
-        .then(visit =>{
+    visitRepo.findLatestOneByuserIdAndPlaceId(userId, req.params.placeid)
+        .then(visit => {
             console.log(visit[0])
-            if(visit[0] === undefined){
+            if (visit[0] === undefined) {
                 questionRepo.findAllByPlaceId(req.params.placeid)
                     .then(result => {
                             return result.map(function (value, index) {
@@ -36,22 +36,23 @@ exports.getFormInPlace = async (req, res, next) => {
                                 return {questionid, question}
                             })
                         }
-                    ).then(requestForm => {res.json({requestForm})})
-            }else{
-                    answerRepo.findByVisitId(visit[0].id)
-                        .then(
-                            answer => {
-                                return answer.map(function (value, index) {
-                                    var questionid = value.questionId;
-                                    var answer = value.answer;
-                                    var question = value.dataValues.question.question;
-                                    return {questionid, question, answer}
-                                })
+                    ).then(requestForm => {
+                    res.json({requestForm})
+                })
+            } else {
+                answerRepo.findByVisitId(visit[0].id)
+                    .then(
+                        answer => {
+                            return answer.map(function (value, index) {
+                                var questionid = value.questionId;
+                                var answer = value.answer;
+                                var question = value.dataValues.question.question;
+                                return {questionid, question, answer}
                             })
-                        .then(requestForm =>res.json({requestForm}))
+                        })
+                    .then(requestForm => res.json({requestForm}))
             }
         })
-
 
 
 };
@@ -136,26 +137,26 @@ exports.updateForm = async (req, res, next) => {
     // req.params.placeid;
     questionRepo.findAllByPlaceId(req.params.placeid)
         .then(async result => {
-                for(var i =0;i<req.body.data.length;i++){
-                    var isDeleted = true;
-                    console.log(req.body.data[i])
-                    if(req.body.data[i].questionid>0){
-                        for(var j =0;result[j]!=undefined;j++){
-                            if(req.body.data[i].questionid === result[j].id){
-                                isDeleted=false;
-                                await questionRepo.updateByQuestionId(req.body.data[i].question,result[j].id)
-                            }
-                        }
-                    }else{
-                        isDeleted=false;
-                        var question = req.body.data[i].question;
-                        var placeId = req.params.placeid
-                        await questionRepo.store({id:null,question:question,PlaceId:placeId})
-                    }
-                    if(isDeleted){
-                        await questionRepo.deleteByQuestionId(req.body.data[i].questionid)
+                var j = 0;
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].id != req.body.data[j].questionid)
+                        await questionRepo.deleteByQuestionId(result[i].id)
+                    if (result[i].id == req.body.data[j].questionid) {
+                        if (result[i].question != req.body.data[j].question)
+                            await questionRepo.updateByQuestionId(req.body.data[j].question, result[i].id)
+                        j++;
                     }
                 }
+                for (var i = j; i < req.body.data.length; i++)
+                    await questionRepo.store({id: null, question: req.body.data[i].question, PlaceId: req.params.placeid})
             }
-        ).then(res.json(""))
+        ).then(async ()=>await questionRepo.findAllByPlaceId(req.params.placeid)
+        .then(result => {
+                return result.map(function (value, index) {
+                    var questionid = value.id;
+                    var question = value.question;
+                    return {questionid, question}
+                })
+            }
+        ).then(requestForm => res.json({requestForm})))
 };
