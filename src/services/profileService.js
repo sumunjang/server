@@ -10,7 +10,8 @@ exports.getProfile = async (req, res, next) => {
             profile => {
                 const username = profile.name;
                 const userid = profile.user_id;
-                res.json({username, userid})
+                const placeid = profile.palceId
+                res.json({username, userid,placeid})
             }
         )
         .catch(err => res.status(400).json())
